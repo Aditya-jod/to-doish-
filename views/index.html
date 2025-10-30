@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart To-Do Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { 'primary': { '500': '#4f46e5', '600': '#4338ca' } }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-zinc-800 dark:text-zinc-200 transition-colors duration-500">
+
+    <!-- Changed to max-w-7xl for the new 3-column layout -->
+    <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8 space-y-6">
+        
+        <header class="flex justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <!-- Hamburger Menu -->
+                <div class="relative">
+                    <button id="menu-button" class="p-2 rounded-full text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="menu-dropdown" class="absolute z-20 w-48 mt-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg hidden">
+                        <ul class="py-1 text-sm">
+                            <li>
+                                <a href="/" class="flex items-center gap-3 px-4 py-2 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                                    <i data-lucide="home" class="w-4 h-4"></i>
+                                    <span>Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <button id="logout-button" class="w-full text-left flex items-center gap-3 px-4 py-2 text-red-600 dark:text-red-400 hover:bg-zinc-100 dark:hover:bg-zinc-700">
+                                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                                    <span>Logout</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h1 id="greeting" class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white"></h1>
+                    <p id="current-date" class="text-sm text-zinc-500 dark:text-zinc-400"></p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="relative w-20 h-20 flex-shrink-0">
+                    <svg class="w-full h-full" viewBox="0 0 100 100">
+                        <circle class="text-zinc-200 dark:text-zinc-700" stroke-width="8" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" />
+                        <circle id="progress-circle" class="text-primary-500" stroke-width="8" stroke-linecap="round" stroke="currentColor" fill="transparent" r="45" cx="50" cy="50" style="transition: stroke-dashoffset 0.5s ease; transform: rotate(-90deg); transform-origin: 50% 50%;" />
+                    </svg>
+                    <span id="progress-text" class="absolute inset-0 flex items-center justify-center text-xl font-bold text-zinc-700 dark:text-zinc-300">0%</span>
+                </div>
+                <button id="theme-toggle" class="p-2 rounded-full text-zinc-500 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors">
+                    <i data-lucide="sun" id="theme-icon-light"></i>
+                    <i data-lucide="moon" id="theme-icon-dark" class="hidden"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Panel (Moved to top, full-width) -->
+        <section id="stats-panel" class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+             <div class="card-panel p-4 rounded-xl">
+                <p class="text-sm font-medium text-purple-600 dark:text-purple-400">Total Tasks</p>
+                <p id="total-tasks" class="text-xl font-bold text-purple-800 dark:text-purple-200">0</p>
+            </div>
+             <div class="card-panel p-4 rounded-xl">
+                <p class="text-sm font-medium text-yellow-600 dark:text-yellow-400">Pending</p>
+                <p id="pending-tasks" class="text-xl font-bold text-yellow-800 dark:text-yellow-200">0</p>
+            </div>
+             <div class="card-panel p-4 rounded-xl">
+                <p class="text-sm font-medium text-green-600 dark:text-green-400">Completed</p>
+                <p id="completed-tasks" class="text-xl font-bold text-green-800 dark:text-green-200">0</p>
+            </div>
+        </section>
+
+        <!-- New 3-Column Grid (1-2-1 ratio on large screens) -->
+        <!-- Using lg:grid-cols-4, where col 1 is span 1, col 2 is span 2, col 3 is span 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            
+            <!-- COLUMN 1: "LIFE" -->
+            <aside class="lg:col-span-1 space-y-6">
+                <div class="card-panel rounded-xl p-4 sm:p-6">
+                    <div class="flex items-center justify-between mb-3 border-b border-zinc-200 dark:border-zinc-700 pb-2">
+                        <h2 class="text-lg font-semibold">Daily Routine</h2>
+                        <i data-lucide="repeat" class="w-5 h-5 text-zinc-400"></i>
+                    </div>
+                    <ul id="routine-list" class="space-y-3 mb-3 max-h-48 overflow-y-auto pr-2">
+                        <!-- Daily routines will be injected here -->
+                    </ul>
+                    <form id="add-routine-form" class="flex items-center gap-2">
+                        <input type="text" id="routine-input" placeholder="Add a new daily habit..." class="flex-grow bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-full py-1 px-3 text-sm focus:ring-2 focus:ring-primary-500 focus:outline-none">
+                        <button type="submit" class="bg-zinc-600 text-white font-semibold p-2 rounded-full hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-zinc-500 dark:focus:ring-offset-zinc-900 transition-colors flex items-center justify-center">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div id="quote-card" class="bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-200 p-6 rounded-xl shadow-lg">
+                     <h2 class="text-lg font-semibold mb-2">Daily Inspiration</h2>
+                     <blockquote id="quote-text" class="italic text-sm sm:text-base border-l-4 border-indigo-300 dark:border-indigo-500 pl-4">Loading quote...</blockquote>
+                     <cite id="quote-author" class="block text-right text-sm mt-2 font-medium opacity-80"></cite>
+                </div>
+            </aside>
+
+            <!-- COLUMN 2: "PROJECTS" (Main Content) -->
+            <main class="lg:col-span-2 space-y-6">
+                <form id="add-task-form" class="card-panel rounded-xl p-4 flex flex-wrap gap-2 items-center">
+                    <i data-lucide="plus" class="text-zinc-400 dark:text-zinc-500"></i>
+                    <input type="text" id="task-input" placeholder="Add a new task" class="flex-grow bg-transparent border-0 focus:ring-0 focus:outline-none placeholder-zinc-500 dark:placeholder-zinc-400" required>
+                    <div id="custom-category-dropdown" class="relative">
+                        <button type="button" id="category-dropdown-btn" data-value="personal" class="flex items-center justify-between bg-zinc-100 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-full py-1 px-3 focus:ring-2 focus:ring-primary-500 focus:outline-none transition-shadow text-sm">
+                            <span id="selected-category-text" class="font-medium">Personal</span>
+                            <i data-lucide="chevron-down" class="w-4 h-4 ml-1 text-zinc-400"></i>
+                        </button>
+                        <div id="category-options" class="absolute z-10 w-32 mt-2 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg shadow-lg hidden">
+                            <ul class="py-1 text-sm"><li class="px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer" data-value="personal">Personal</li><li class="px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer" data-value="startup">Startup</li><li class="px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer" data-value="learning">Learning</li><li class="px-3 py-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 cursor-pointer" data-value="goals">Goals</li></ul>
+                        </div>
+                    </div>
+                    <button type="submit" class="bg-primary-500 text-white font-semibold p-2 rounded-full hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:focus:ring-offset-zinc-900 transition-all duration-200 hover:scale-105 active:scale-95 flex items-center justify-center">
+                        <i data-lucide="arrow-up" class="w-5 h-5"></i>
+                    </button>
+                </form>
+
+                <div class="card-panel rounded-xl p-4 sm:p-6">
+                    <div class="flex items-center justify-between mb-4 border-b border-zinc-200 dark:border-zinc-700 pb-3">
+                        <h2 class="text-lg font-semibold">Tasks...</h2>
+                        <div class="flex space-x-1"><button data-filter="all" class="filter-btn text-sm font-medium px-3 py-1 rounded-full bg-primary-500 text-white">All</button><button data-filter="pending" class="filter-btn text-sm font-medium px-3 py-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700">Pending</button><button data-filter="completed" class="filter-btn text-sm font-medium px-3 py-1 rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700">Completed</button></div>
+                    </div>
+                    <ul id="task-list" class="space-y-3 h-96 overflow-y-auto pr-2"></ul>
+                    <div id="empty-state" class="text-center text-zinc-500 dark:text-zinc-400 py-8 hidden flex-col items-center justify-center h-96">
+                        <div id="empty-start-message"><i data-lucide="clipboard-list" class="w-16 h-16 text-zinc-400 dark:text-zinc-500 mb-4 mx-auto"></i><p class="font-medium">Your task list is empty.</p><p class="text-sm">Add a new one to get started.</p></div>
+                        <div id="empty-celebrate-message" class="hidden"><i data-lucide="party-popper" class="w-16 h-16 text-green-500 mb-4 mx-auto"></i><p class="font-medium text-lg">All done for today!</p><p class="text-sm">Amazing work. Time to relax!</p></div>
+                    </div>
+                    <div id="bulk-actions" class="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-700 flex justify-end space-x-2"><button id="delete-completed-btn" class="text-xs text-yellow-600 hover:text-yellow-800 dark:hover:text-yellow-400 font-medium py-1 px-2 rounded-full hover:bg-yellow-500/20">Delete Completed</button><button id="delete-pending-btn" class="text-xs text-yellow-600 hover:text-yellow-800 dark:hover:text-yellow-400 font-medium py-1 px-2 rounded-full hover:bg-yellow-500/20">Delete Pending</button><button id="delete-all-btn" class="text-xs text-red-500 hover:text-red-700 dark:hover:text-red-400 font-medium py-1 px-2 rounded-full hover:bg-red-500/20">Delete All</button></div>
+                </div>
+            </main>
+
+            <!-- COLUMN 3: "DATA" -->
+            <aside class="lg:col-span-1 space-y-6">
+                <!-- Lifetime Stats -->
+                <div class="card-panel rounded-xl p-4 sm:p-6 text-center">
+                     <div class="flex items-center justify-center gap-2 mb-2">
+                        <i data-lucide="award" class="w-5 h-5 text-green-500"></i>
+                        <h2 class="text-lg font-semibold">Lifetime Achievements</h2>
+                     </div>
+                     <p class="text-sm text-zinc-500 dark:text-zinc-400">Total Tasks Conquered</p>
+                     <p id="lifetime-completed-tasks" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-1">0</p>
+                </div>
+
+                <div class="card-panel rounded-xl p-4 sm:p-6">
+                     <div class="flex items-center gap-2 mb-3 border-b border-zinc-200 dark:border-zinc-700 pb-2"><i data-lucide="notebook-pen" class="w-5 h-5"></i><h2 class="text-lg font-semibold">Scratchpad</h2></div>
+                     <textarea id="notes" placeholder="Jot down your thoughts, ideas, or reminders..." class="w-full h-64 bg-transparent border-0 rounded-md p-0 focus:ring-0 focus:outline-none resize-none placeholder-zinc-500 dark:placeholder-zinc-400"></textarea>
+                     <div id="notes-saved-indicator" class="text-xs text-right text-zinc-500 dark:text-zinc-400 mt-1 h-4 transition-opacity opacity-0">Saved</div>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
