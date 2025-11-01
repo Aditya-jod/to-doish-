@@ -4,15 +4,12 @@ Welcome to To-Doish, a modern and intuitive full-stack to-do list application de
 
 ## Key Features
 
-- **Full-Stack Architecture:** Built with a robust Node.js and Express backend, ensuring reliable and scalable performance.
-- **Persistent Database Storage:** User data, including tasks and routines, is securely stored in a PostgreSQL database, allowing access from any device.
-- **Secure User Authentication:** A complete login and registration system using JSON Web Tokens (JWT) keeps user data private and secure. Passwords are encrypted using `bcryptjs`.
-- **Dynamic Task Management:** Add, edit, and delete tasks with ease. Mark tasks as complete and watch your progress update in real-time.
-- **Task Categorization:** Assign categories (Personal, Startup, Learning, Goals) to your tasks for better organization.
-- **Daily Routine Tracker:** Manage and persist your daily habits separately from your main tasks.
-- **Progress Visualization:** A dynamic progress circle and statistics panel provide an at-a-glance view of your daily achievements.
-- **Dark & Light Mode:** Switch between themes for your viewing comfort.
-- **Responsive Design:** The layout is optimized for both desktop and mobile devices.
+- **Secure User Accounts:** Standard registration and login with password encryption.
+- **Cloud-Synced Tasks:** Your to-dos are saved to a database, accessible from anywhere.
+- **Task & Routine Management:** A simple interface to add, edit, and delete tasks and daily routines.
+- **Progress Tracking:** See your completed tasks and daily progress at a glance.
+- **Light & Dark Mode:** Choose your preferred theme.
+- **Responsive Design:** Works on both desktop and mobile.
 
 ## File Structure
 
