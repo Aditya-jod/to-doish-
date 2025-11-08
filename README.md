@@ -69,7 +69,7 @@ to-doish/
     DB_USER=your_postgres_username
     DB_PASSWORD=your_postgres_password
     DB_NAME=todoish
-    DB_PORT=5433
+    DB_PORT=your_port
     JWT_SECRET=your_super_secret_jwt_key
     ```
     *Ensure you have created a database named `todoish` in PostgreSQL.*
